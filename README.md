@@ -38,20 +38,25 @@
 
 ```text
 sudoku-batch-parallel/
-├── input.csv               # Input: puzzle (81 digits), optional clue ID
-├── output.csv              # Generated: clue, time_ms, backtracks, propagations
-├── sudoku_batch_parallel.c # High-performance parallel batch driver
-├── include/
-│   └── sudoku.h            # Solver API + OpenMP threadprivate directives
-├── src/                    # Core solver implementation
-│   ├── sudoku.c            # Constraint + backtracking engine
-│   ├── backtrack.c         # Recursive search routines
-│   ├── box.c               # Box-centric elimination logic
-│   ├── square.c            # Cell data structures & helpers
-│   └── puzzle.c            # CSV parsing and grid builder
-├── Makefile                # Preconfigured build targets
-├── .github/workflows/ci.yml# Optional: performance regression tests
-└── README.md               # This epic guide
+├── data
+│   ├── input_shortened.csv
+│   ├── output_average.csv
+│   └── output.csv
+├── include
+│   └── sudoku.h
+├── makefile
+├── README.md
+├── src
+│   ├── backtrack.c
+│   ├── box.c
+│   ├── puzzle.c
+│   ├── square.c
+│   └── sudoku.c
+├── sudoku_batch_parallel.c
+├── Sudoku-Solver-Testing
+│   ├── datahandle.py
+│   └── plot.py
+└── tls_vars.c
 ```
 
 ---
@@ -61,8 +66,8 @@ sudoku-batch-parallel/
 1. **Clone & Enter**
 
    ```bash
-   git clone https://github.com/<you>/sudoku-batch-parallel.git
-   cd sudoku-batch-parallel
+   git clone https://github.com/<you>/Sudoku-Solver-Parallel.git
+   cd Sudoku-Solver-Parallel
    ```
 
 2. **Compile with Maximal Optimizations**
