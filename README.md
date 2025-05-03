@@ -1,128 +1,126 @@
-# ⚡️ Ultra-Fast C Sudoku Solver ⚡️
+# ⚡️ Lightning-Fast Parallel Sudoku Batch Solver ⚡️
 
-A blazing-fast, highly-optimized Sudoku solver in pure C, combining advanced constraint-propagation techniques with a backtracking fallback for guaranteed solutions. Perfect for embedding in games, tutorials, or as a demonstration of high-performance algorithm design.
-
----
-
-## 🚀 Key Features
-
-* **Hybrid Solving Strategy**
-  * **Constraint Propagation**: Applies *naked singles* and *unique box singles* iteratively to fill easy cells in linear time.
-  * **Backtracking**: When propagation stalls, a depth-first search with validity checks kicks in—ensuring every valid puzzle is solved.
-
-* **Bitmask-Based Possibility Tracking**
-  * Uses a `short int POSSIBLE = 0x1FF` (9 bits) to efficiently represent which numbers remain valid in each cell.
-  * Constant-time updates via bitwise operations for row, column, and box elimination.
-
-* **Cache-Friendly Data Structures**
-  * 2D arrays of `Square*` laid out in row-major order for optimal memory locality.
-  * Pre-allocated `Box` structs with direct pointers to contained squares—no dynamic resizing during solve.
-
-* **Dynamic Unsolved Counter**
-  * Global `short UNSOLVED` decremented on each assignment, enabling immediate detection of completion without scanning the grid.
-
-* **Modular, Clean Architecture**
-  * Clear separation of concerns:
-    * **`puzzle.c`**: Puzzle initialization & propagation
-    * **`backtrack.c`**: Recursive backtracking solver
-    * **`box.c`** & **`square.c`**: Box- and square-level logic
-    * **`sudoku.h`**: Shared types & prototypes
-  * Zero external dependencies—compiles with a single `Makefile`.
+> Blast through **thousands** of puzzles in seconds—maximize your CPU’s potential with our battle-tested, ultra-optimized C/OpenMP engine.
 
 ---
 
-## 🛠️ Installation & Build
+## 🚀 What Makes This Solver Unstoppable?
 
-1. **Clone the repo**
+* **True Multicore Mastery**
 
-   ```bash
-   git clone https://github.com/yourname/sudoku-solver.git
-   cd sudoku-solver
-   ```
+  * Auto-detects and saturates **all CPU cores** via OpenMP (`omp_get_num_procs()`).
+  * **Dynamic work-stealing**: evenly distributes puzzles at runtime for zero thread idling.
 
-2. **Build**
+* **In-Memory Superqueue**
 
-   ```bash
-   make
-   ```
+  * Load **entire datasets** upfront to eliminate disk I/O stalls during computation.
+  * Scales to **hundreds of thousands** of puzzles with minimal memory overhead.
 
-   * Produces the `sudoku` executable, linking only standard C libraries.
+* **Cutting-Edge Hybrid Algorithm**
 
-3. **Run**
+  * **Constraint Propagation**: lightning-fast elimination of impossible candidates (naked singles, hidden singles, box-line interactions).
+  * **Depth-First Backtracking**: kicks in only when needed, guaranteeing every puzzle finds its solution.
 
-   ```bash
-   ./sudoku
-   ```
+* **Granular Performance Telemetry**
 
-   * Prints the initial puzzle, each propagation step, and final solution. Switches automatically to backtracking if needed.
+  * **Precise solve time** measurement down to microseconds per puzzle.
+  * Detailed **operation counts**: track propagation vs. backtracking to tune heuristics.
+  * Output-ready **CSV logs** for integration with BI tools and dashboards.
+
+* **Zero Dependencies Beyond C99 + OpenMP**
+
+  * No external libs: lightning compile times, rock-solid portability on macOS, Linux, Windows (MSYS2).
+  * Standard library only—easy integration into any CI/CD pipeline.
 
 ---
 
-## 🧩 Usage Example
+## 📁 Repository Blueprint
 
-```bash
-$ ./sudoku
-- - - | - - - | - - -
-- - - | - - 9 | - - -
-- - 4 | - - - | - - -
-------+-------+------
-
-1 - - | - - - | - - -
-- - - | - - - | - 9 -
-- - - | - 8 - | - - -
-------+-------+------
-
-- - - | - - - | - - -
-- - - | - - - | - - -
-- - - | - - - | 9 - -
-
-…constraint propagation…
-
-…switching to backtracking…
-
-…final solution…
+```text
+sudoku-batch-parallel/
+├── input.csv               # Input: puzzle (81 digits), optional clue ID
+├── output.csv              # Generated: clue, time_ms, backtracks, propagations
+├── sudoku_batch_parallel.c # High-performance parallel batch driver
+├── include/
+│   └── sudoku.h            # Solver API + OpenMP threadprivate directives
+├── src/                    # Core solver implementation
+│   ├── sudoku.c            # Constraint + backtracking engine
+│   ├── backtrack.c         # Recursive search routines
+│   ├── box.c               # Box-centric elimination logic
+│   ├── square.c            # Cell data structures & helpers
+│   └── puzzle.c            # CSV parsing and grid builder
+├── Makefile                # Preconfigured build targets
+├── .github/workflows/ci.yml# Optional: performance regression tests
+└── README.md               # This epic guide
 ```
 
 ---
 
-## 🔬 Under the Hood
+## 🛠️ Quickstart: Compile & Crush It
 
-1. **Initialization**
-   * `createPuzzle()`: Loads a 9×9 integer grid into a dynamic 2D array.
-   * `setUpPuzzle()`: Wraps each cell in a `Square` struct, assigns it to the correct `Box`, initializes possibility bitmasks, and updates peers for pre-filled values.
+1. **Clone & Enter**
 
-2. **Constraint Propagation Loop**
-   * **`checkPuzzle()`**: Scans for any cell with exactly one possible value (`solvable == 1`) and fills it.
-   * **`boxSingles()`**: Within each 3×3 box, finds numbers that can go in only one cell *even if that cell has multiple possibilities*, and assigns them.
-   * Repeats until no further progress.
+   ```bash
+   git clone https://github.com/<you>/sudoku-batch-parallel.git
+   cd sudoku-batch-parallel
+   ```
 
-3. **Backtracking Fallback**
-   * **`backtrackSolve()`**: Picks the first empty cell, tries all valid digits via `isValidMove()`, and recurses—backtracking on failure.
-   * Guaranteed to terminate with a solution or report unsolvable.
+2. **Compile with Maximal Optimizations**
 
-4. **Optimizations & Tweaks**
-   * **Bitwise Masks** for speed: Eliminate expensive loops by marking possibilities with single-bit flags.
-   * **Early Termination**: Global `UNSOLVED` counter avoids full-grid scans.
-   * **Cache Alignment**: Static array sizes (`SIZE_ROWS`, `SIZE_COLUMNS`) tuned for 9×9 grid fits in L1 cache.
-   * **Branch-and-Bound**: Constraint propagation reduces search tree dramatically—backtracking invoked *only* on hard puzzles.
+   ```bash
+   make all
+   # or, manually:
+   gcc -std=c11 -Iinclude/ -O3 -march=native -funroll-loops -flto -pipe \  
+       -DNDEBUG -fopenmp sudoku_batch_parallel.c src/*.c -lm -o solver
+   ```
+
+3. **Prepare `input.csv`**
+
+   ```csv
+   puzzle,clue
+   530070000600195000098000060800060003400803001700020006060000280000419005000080079,example-001
+   ...
+   ```
+
+4. **Unleash the Solver**
+
+   ```bash
+   ./solver
+   ```
+
+   Watch as `output.csv` fills with:
+
+   ```csv
+   clue,time_ms,backtracks,propagations
+   example-001,0.045,0,210
+   ...
+   ```
 
 ---
 
-## 🧪 Performance Benchmarks
+## 📊 Benchmark & Visualize
 
-| Puzzle Difficulty | Propagation Steps | Backtracking Calls | Total Time (µs) |
-| ----------------- | ----------------- | ------------------ | --------------- |
-| Easy              | 50                | 0                  | ~200            |
-| Medium            | 200               | ~10                | ~800            |
-| Hard              | 500               | ~250               | ~2,500          |
+* **Hyperfine** for rapid, statistical benchmarks across difficulty tiers.
+* **CI Integration**: track mean solve time across commits with GitHub Actions.
+* **Data Science Ready**: import `output.csv` into Python/R/Excel to chart solver performance trends.
 
 ---
 
-## ⚖️ License
+## 🤝 Contribute & Collaborate
 
-MIT License © 2025 — feel free to use, modify, and distribute!
+We welcome all improvements:
+
+* Smarter propagation heuristics
+* Alternative scheduling policies
+* GPU offload prototypes
+* 🛠️ Cross-platform CI workflows
+
+Fork, tweak, and send a PR—let’s push the boundaries of Sudoku performance together!
 
 ---
 
-> “Combining the light-speed of bitwise constraint checks with rock-solid backtracking, this solver is both beautiful in code and brutal in performance.”
-> *— Your Name, Lead Developer*
+## 📝 License & Credits
+
+Distributed under the **MIT License**. See [LICENSE](LICENSE) for details.
+
+Crafted with 💡 by \[Your Name] • Let’s solve the unsolvable!

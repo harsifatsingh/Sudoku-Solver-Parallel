@@ -116,49 +116,26 @@ int checkPuzzle(Square ***sudoku, Box **boxes)
     return boxSingles(sudoku, boxes);
 }
 
-int **createPuzzle()
+int **createPuzzle(char *puzzleString)
 {
-    // int arr[9][9] = {
-    //     {8, 0, 0,  0, 4, 0,  0, 0, 3},
-    //     {0, 2, 7,  0, 0, 0,  0, 0, 0},
-    //     {0, 0, 3,  0, 5, 0,  2, 0, 0},
-    
-    //     {0, 0, 0,  0, 0, 0,  0, 0, 0},
-    //     {3, 0, 0,  0, 0, 5,  0, 9, 0},
-    //     {1, 0, 0,  0, 6, 0,  0, 0, 8},
-    
-    //     {0, 0, 0,  0, 0, 7,  0, 0, 2},
-    //     {7, 1, 0,  0, 0, 9,  8, 0, 0},
-    //     {5, 0, 0,  0, 0, 1,  0, 0, 6}
-    // };
-
-    int arr[9][9] = {
-        {0, 0, 0,  0, 0, 0,  0, 0, 0},
-        {0, 0, 0,  0, 9, 0,  0, 0, 0},
-        {0, 0, 4,  0, 0, 0,  0, 0, 0},
-    
-        {1, 0, 0,  0, 0, 0,  0, 0, 0},
-        {0, 0, 0,  0, 0, 0,  0, 9, 0},
-        {0, 0, 0,  0, 8, 0,  0, 0, 0},
-    
-        {0, 0, 0,  0, 0, 0,  0, 0, 0},
-        {0, 0, 0,  0, 0, 0,  0, 0, 0},
-        {0, 0, 0,  0, 0, 0,  9, 0, 0}
-    };
-    
-
-    int **puzzle = malloc(sizeof(*puzzle) * SIZE_ROWS);
+    int **arr = malloc(SIZE_ROWS * sizeof(int *)); // Allocate memory for rows
 
     for (int i = 0; i < SIZE_ROWS; i++)
     {
-        puzzle[i] = malloc(SIZE_COLUMNS * sizeof *puzzle[i]);
+        arr[i] = malloc(SIZE_COLUMNS * sizeof(int)); // Allocate memory for columns
+    }
 
+    int index = 0;
+    for (int i = 0; i < SIZE_ROWS; i++)
+    {
         for (int j = 0; j < SIZE_COLUMNS; j++)
         {
-            puzzle[i][j] = arr[i][j];
+            arr[i][j] = (puzzleString[index]) - '0';
+            index++;
         }
     }
-    return puzzle;
+
+    return arr;
 }
 
 void printPuzzle(Square ***puzzle)

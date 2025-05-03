@@ -4,11 +4,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
+#include <string.h>
+#include <ctype.h>
 
 extern short int UNSOLVED;
 extern int POSSIBLE;
 extern int SIZE_ROWS;
 extern int SIZE_COLUMNS;
+extern long propagation_count;
+extern long backtrack_count;
+#ifdef _OPENMP
+#pragma omp threadprivate(UNSOLVED, propagation_count, backtrack_count)
+#endif
+
 
 typedef struct Sudoku
 {
@@ -35,7 +44,7 @@ typedef struct Square
     int column;
 } Square;
 
-int **createPuzzle();
+int **createPuzzle(char *puzzleString);
 void printPuzzle(Square ***puzzle);
 Sudoku *setUpPuzzle(int **puzzle);
 Sudoku *createSodoku(Square ***squares, Box **boxes);

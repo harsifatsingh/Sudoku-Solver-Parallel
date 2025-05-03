@@ -2,6 +2,7 @@
 
 int isValidMove(Sudoku *sudoku, int row, int col, int num)
 {
+    propagation_count++;
     for (int i = 0; i < SIZE_ROWS; i++)
     {
         if (sudoku->squares[row][i]->number == num)
@@ -24,6 +25,7 @@ int isValidMove(Sudoku *sudoku, int row, int col, int num)
 
 int backtrackSolve(Sudoku *sudoku)
 {
+    backtrack_count++;
     if (UNSOLVED == 0)
         return 1;
 

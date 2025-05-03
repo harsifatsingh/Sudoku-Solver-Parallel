@@ -1,11 +1,12 @@
 {
     "github.copilot.enable": {
-        "*": false,
+        "*": true,
         "plaintext": false,
         "markdown": false,
         "scminput": false
     },
     "files.associations": {
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "sudoku.h": "c"
     }
 }
