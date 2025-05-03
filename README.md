@@ -70,8 +70,15 @@ sudoku-batch-parallel/
    ```bash
    make all
    # or, manually:
-   gcc -std=c11 -Iinclude/ -O3 -march=native -funroll-loops -flto -pipe \  
-       -DNDEBUG -fopenmp sudoku_batch_parallel.c src/*.c -lm -o solver
+   gcc-14 -std=c11 \
+    -DBATCH_BUILD \
+    -Iinclude/ \
+    -O3 -Ofast -march=native -funroll-loops -flto -pipe -DNDEBUG \
+    -fopenmp \
+    sudoku_batch_parallel.c \
+    src/sudoku.c src/backtrack.c src/box.c src/square.c src/puzzle.c \
+    -lm -o sudoku_batch_parallel
+
    ```
 
 3. **Prepare `input.csv`**
@@ -85,7 +92,7 @@ sudoku-batch-parallel/
 4. **Unleash the Solver**
 
    ```bash
-   ./solver
+   ./sudoku_batch_parallel
    ```
 
    Watch as `output.csv` fills with:
