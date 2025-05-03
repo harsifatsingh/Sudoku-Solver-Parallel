@@ -133,6 +133,6 @@ Fork, tweak, and send a PR—let’s push the boundaries of Sudoku performance t
 
 ## 📝 License & Credits
 
-Distributed under the **MIT License**. See [LICENSE](LICENSE) for details.
+Distributed under the **MIT License**.
 
 Crafted with 💡 by Harsifat Singh • Let’s solve the unsolvable!
