@@ -123,4 +123,4 @@ Fork, tweak, and send a PR—let’s push the boundaries of Sudoku performance t
 
 Distributed under the **MIT License**. See [LICENSE](LICENSE) for details.
 
-Crafted with 💡 by \[Your Name] • Let’s solve the unsolvable!
+Crafted with 💡 by \Harsifat Singh • Let’s solve the unsolvable!
